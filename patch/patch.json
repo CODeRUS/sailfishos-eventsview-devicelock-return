@@ -1,0 +1,8 @@
+{
+    "name": "Eventsview devicelock return",
+    "description": "Patch for returning to evetsview after unlocking device when peeking",
+    "category": "homescreen",
+    "infos": {
+        "maintainer": "coderus"
+    }
+}

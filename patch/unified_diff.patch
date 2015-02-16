@@ -1,0 +1,38 @@
+commit 4bce4821194f5f59af16c6925e072004b14462ff
+Author: CODeRUS <coderusinbox@gmail.com>
+Date:   Mon Feb 16 20:11:28 2015 +0500
+
+    [v0.0.1] Eventsview devicelock return
+
+diff --git a/usr/share/lipstick-jolla-home-qt5/compositor.qml b/usr/share/lipstick-jolla-home-qt5/compositor.qml
+index 12f6e89..ff7f6cf 100644
+--- a/usr/share/lipstick-jolla-home-qt5/compositor.qml
++++ b/usr/share/lipstick-jolla-home-qt5/compositor.qml
+@@ -178,11 +178,14 @@ Compositor {
+     PeekFilter.boundaryWidth: 24 * root.width / 540
+     PeekFilter.boundaryHeight: 24 * root.height / 960
+ 
++    property bool eventsviewPendingGesture
++
+     PeekFilter.onGestureTriggered: {
+         if (eventPeek) {
+             if (desktop.deviceIsLocked) {
+                 // Do not activate events view when device is locked but show the device lock
+                 desktop.dashboardInstance.snapToPage(1, true)
++                root.eventsviewPendingGesture = true
+                 return
+             }
+             root.preEventPeekWindow = root.alarmActive ? root.homeWindow : root.topmostWindow
+@@ -1196,6 +1199,12 @@ Compositor {
+                 windowToFront(inhibitedWindow.windowId)
+                 inhibitedWindow = null
+             }
++            else if (root.eventsviewPendingGesture) {
++                root.eventsviewPendingGesture = false
++                root.preEventPeekWindow = root.alarmActive ? root.homeWindow : root.topmostWindow
++                alarmsLayer.hideAlarms()
++                setCurrentWindow(root.eventsWindow)
++            }
+         }
+         onScreenIsLockedChanged: {
+             if (desktop.screenIsLocked && inhibitedWindow) {
